@@ -1,0 +1,56 @@
+{
+    "name": "mitra-design-theme-helper",
+    "displayName": "Mitra Design Theme Helper",
+    "description": "Mitra Design 组件库主题变量提示",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.87.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onLanguage:less"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "mitra-design-theme-helper.helloWorld",
+                "title": "Hello World"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "pnpm run package",
+        "compile": "webpack",
+        "watch": "webpack --watch",
+        "package": "webpack --mode production --devtool hidden-source-map",
+        "compile-tests": "tsc -p . --outDir out",
+        "watch-tests": "tsc -p . -w --outDir out",
+        "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+        "lint": "eslint src --ext ts",
+        "parse-docs": "node scripts/parseDocs.js",
+        "test": "vscode-test"
+    },
+    "devDependencies": {
+        "@types/mocha": "^10.0.6",
+        "@types/node": "18.x",
+        "@types/vscode": "^1.87.0",
+        "@typescript-eslint/eslint-plugin": "^7.0.2",
+        "@typescript-eslint/parser": "^7.0.2",
+        "@vscode/test-cli": "^0.0.6",
+        "@vscode/test-electron": "^2.3.9",
+        "eslint": "^8.56.0",
+        "ts-loader": "^9.5.1",
+        "typescript": "^5.3.3",
+        "webpack": "^5.90.3",
+        "webpack-cli": "^5.1.4"
+    },
+    "dependencies": {
+        "@mitra-design/color": "^2.4.4",
+        "fast-glob": "^3.3.2",
+        "fs-extra": "^11.2.0",
+        "typedoc": "^0.25.12"
+    }
+}

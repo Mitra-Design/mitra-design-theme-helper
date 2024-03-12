@@ -1,0 +1,6 @@
+# .gitignore syntax (uses node-ignore behind the scenes)
+*.js
+*.jsx
+*.ts
+*.tsx
+*.html
