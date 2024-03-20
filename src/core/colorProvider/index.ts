@@ -1,9 +1,15 @@
 import * as vscode from 'vscode';
 import tinycolor from "tinycolor2";
-import { getDesignToken } from '../../../es/tokens/getDesignToken';
-import { toUpperCamelCase } from '../../../es/utils/toCamelCase';
+import { toUpperCamelCase } from '../../utils/toCamelCase';
+import type { DesignTokenMeta } from '../../types/token';
 
 class ColorProvider implements vscode.DocumentColorProvider {
+    private tokens: DesignTokenMeta;
+
+    constructor(tokens: DesignTokenMeta) {
+        this.tokens = tokens;
+    }
+
     provideDocumentColors(document: vscode.TextDocument): vscode.ProviderResult<vscode.ColorInformation[]> {
         const colors: vscode.ColorInformation[] = [];
 
@@ -16,8 +22,6 @@ class ColorProvider implements vscode.DocumentColorProvider {
             text = text.slice(start);
         }
 
-        const tokens = getDesignToken();
-
         while (match = regex.exec(text)) {
             const colorValue = match[1];
             const line = document.lineAt(document.positionAt(match.index + start).line);
@@ -28,11 +32,11 @@ class ColorProvider implements vscode.DocumentColorProvider {
                 document.positionAt(match.index + start + colorValue.length + 1)
             );
 
-            const tokenValue = tokens[toUpperCamelCase(colorValue)];
+            const tokenValue = this.tokens[toUpperCamelCase(colorValue)];
             if (!tokenValue) {
                 continue;
             }
-            const { r, g, b, a } = tinycolor(tokenValue).toRgb();
+            const { r, g, b, a } = tinycolor(tokenValue.default).toRgb();
             const color = new vscode.Color(r / 255, g / 255, b / 255, a);
 
             colors.push(new vscode.ColorInformation(colorRange, color));
@@ -53,8 +57,8 @@ class ColorProvider implements vscode.DocumentColorProvider {
 }
 
 
-export default function registerColorProvider(context: vscode.ExtensionContext) {
-    const provider = new ColorProvider();
+export default function registerColorProvider(context: vscode.ExtensionContext, tokens: DesignTokenMeta) {
+    const provider = new ColorProvider(tokens);
     const disposable = vscode.languages.registerColorProvider(['less', 'vue'], provider);
 
     context.subscriptions.push(disposable);

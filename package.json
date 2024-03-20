@@ -21,7 +21,17 @@
                 "command": "mitra-design-theme-helper.helloWorld",
                 "title": "Hello World"
             }
-        ]
+        ],
+        "configuration": {
+            "title": "mitra-design-theme-helper",
+            "properties": {
+                "mitra-design-theme-helper.token-meta-json-path": {
+                    "type": "string",
+                    "default": "node_modules/@mitra-design/theme/es/tokens/token-meta.json",
+                    "description": "配置 Token 元数据的路径"
+                }
+            }
+        }
     },
     "scripts": {
         "vscode:prepublish": "pnpm run package",
@@ -50,6 +60,7 @@
     },
     "dependencies": {
         "@mitra-design/color": "^2.4.4",
+        "@types/fs-extra": "^11.0.4",
         "@types/tinycolor2": "^1.4.6",
         "fs-extra": "^11.2.0",
         "tinycolor2": "^1.6.0"

@@ -1,25 +1,20 @@
 import * as vscode from 'vscode';
-import { getLessVariablesPath } from '../../utils/getPath';
-import { findVariables } from '../../utils/findVariables';
 
-import { getDesignToken } from '../../../es/tokens/getDesignToken';
 import { mergeTokenMeta } from './mergeTokenMeta';
+import type { DesignTokenMeta } from '../../types/token';
 
 const provideCompletionItems = async (
     document: vscode.TextDocument,
-    position: vscode.Position
+    position: vscode.Position,
+    tokens: DesignTokenMeta
 ) => {
     const line = document.lineAt(position);
-    // const fileName = document.fileName;
-    // const lessVariablesPath = await getLessVariablesPath();
 
     if (line.text.indexOf(':') === -1) {
         return;
     }
 
-    // const variables = Object.assign({}, findVariables(lessVariablesPath));
-    const tokens = getDesignToken();
-    const meta = mergeTokenMeta(tokens, {});
+    const meta = mergeTokenMeta(tokens);
 
     return Object.keys(meta).map((key) => {
         const { detail, filterText, documentation, label } = meta[key];
@@ -39,12 +34,15 @@ const provideCompletionItems = async (
 };
 
 export default function lessVariablesCompletion(
-    context: vscode.ExtensionContext
+    context: vscode.ExtensionContext,
+    tokens: DesignTokenMeta
 ) {
     context.subscriptions.push(
         vscode.languages.registerCompletionItemProvider(
             ['less', 'vue'],
-            { provideCompletionItems },
+            {
+                provideCompletionItems: (document, position) => provideCompletionItems(document, position, tokens)
+            },
             ' ',
         ),
     );

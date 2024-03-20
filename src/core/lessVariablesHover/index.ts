@@ -1,18 +1,16 @@
 // @ts-nocheck
 import * as vscode from 'vscode';
-import { getDesignToken } from '../../../es/tokens/getDesignToken';
-import { toKebabCase } from '../../../es/utils/toKebabCase';
+import { toKebabCase } from '../../utils/toKebabCase';
 import { MitraDesignDocsURL } from '../../utils/constants';
 import { valueNeedAddPx } from '../../utils/valueNeedAddPx';
 
-import TokenMeta from '../../../es/tokens/token-meta.json';
-import { toUpperCamelCase } from '../../../es/utils/toCamelCase';
-
-const tokenMeta = { ...TokenMeta.atom, ...TokenMeta.material };
+import { toUpperCamelCase } from '../../utils/toCamelCase';
+import type { DesignTokenMeta } from '../../types/token';
 
 const provideHover = async (
     document: vscode.TextDocument,
-    position: vscode.Position
+    position: vscode.Position,
+    tokens: DesignTokenMeta
 ) => {
     let word = document.getText(document.getWordRangeAtPosition(position));
     if (document.languageId === 'vue') {
@@ -22,8 +20,6 @@ const provideHover = async (
         return;
     }
 
-    const tokens = getDesignToken();
-
     let lessVarValue = '';
 
     for (const key in tokens) {
@@ -31,7 +27,7 @@ const provideHover = async (
             const lessVarName = toKebabCase(key);
             if (word.slice(1) === lessVarName) {
                 const need = valueNeedAddPx(lessVarName);
-                lessVarValue = `${tokens[key]}${need ? 'px' : ''}`;
+                lessVarValue = `${tokens[key].default}${need ? 'px' : ''}`;
                 break;
             }
         }
@@ -46,9 +42,9 @@ const provideHover = async (
     const content = `
 #### ${word}: ${lessVarValue}
 
-${tokenMeta[key]?.name ?? ''}
+${tokens[key]?.name ?? ''}
 
-${tokenMeta[key]?.desc ?? ''}
+${tokens[key]?.desc ?? ''}
 
 [Mitra Design Theme 全局变量文档](${MitraDesignDocsURL})
     `;
@@ -57,9 +53,13 @@ ${tokenMeta[key]?.desc ?? ''}
     return new vscode.Hover(mdString);
 };
 
-export default function lessVariablesHover(context: vscode.ExtensionContext) {
+export default function lessVariablesHover(context: vscode.ExtensionContext, tokens: DesignTokenMeta) {
     context.subscriptions.push(
-        vscode.languages.registerHoverProvider('less', { provideHover }),
-        vscode.languages.registerHoverProvider('vue', { provideHover }),
+        vscode.languages.registerHoverProvider(
+            ['less', 'vue'],
+            {
+                provideHover: (document, position) => provideHover(document, position, tokens)
+            }
+        ),
     );
 }

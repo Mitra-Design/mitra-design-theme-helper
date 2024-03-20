@@ -1,28 +1,34 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import * as path from 'node:path';
-import * as fs from 'node:fs';
 import lessVariablesCompletion from './core/lessVariablesCompletion';
 import lessVariablesHover from './core/lessVariablesHover';
 import registerColorProvider from './core/colorProvider';
 import registerCodelensProvider from './core/codelensProvider';
 import registerCodelensActionCommand from './core/codelensProvider/registerCommand';
+import { getDesignToken } from './utils/getDesignToken';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
+    const tokens = await getDesignToken();
+
+    if (!tokens) {
+        vscode.window.showErrorMessage('mitra-design-theme-helper ERROR: Token path not found!');
+        return;
+    }
+
+    vscode.window.showInformationMessage('mitra-design-theme-helper: READY!');
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "mitra-design-theme-helper" is now active!');
 
-	// const docs = fs.readFileSync(path.resolve(__dirname, '../es/interface/atom.ts')).toString();
 
-	lessVariablesCompletion(context);
-	lessVariablesHover(context);
-	registerColorProvider(context);
-	registerCodelensProvider(context);
+	lessVariablesCompletion(context, tokens);
+	lessVariablesHover(context, tokens);
+	registerColorProvider(context, tokens);
+	registerCodelensProvider(context, tokens);
 
     registerCodelensActionCommand(context);
 

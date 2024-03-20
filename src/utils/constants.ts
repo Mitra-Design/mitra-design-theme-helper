@@ -26,3 +26,6 @@ export const FilterPropCompletionItems = [
     'size',
     'border-radius'
 ];
+
+
+export const WorkspaceConfigProperty = 'mitra-design-theme-helper.token-meta-json-path';

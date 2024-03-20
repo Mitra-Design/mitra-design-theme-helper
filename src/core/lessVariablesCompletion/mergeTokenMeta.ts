@@ -1,41 +1,34 @@
-import type { MaterialToken } from '../../../es/interface/material';
-import { toKebabCase } from '../../../es/utils/toKebabCase';
+import { toKebabCase } from '../../utils/toKebabCase';
 
-import TokenMeta from '../../../es/tokens/token-meta.json';
 import { valueNeedAddPx } from '../../utils/valueNeedAddPx';
 import { FilterColorCompletionItems, FilterPropCompletionItems } from '../../utils/constants';
+import type { DesignTokenMeta } from '../../types/token';
 
-const tokenMeta = { ...TokenMeta.atom, ...TokenMeta.material };
 
-export const mergeTokenMeta = (
-    tokens: MaterialToken,
-    cssVars: Record<string, string>
-) => {
+export const mergeTokenMeta = (tokens: DesignTokenMeta) => {
     const meta: Record<string, any> = {};
 
     Object.keys(tokens)
         .filter((key => !FilterColorCompletionItems.some(item => toKebabCase(key).startsWith(item))))
         .filter((key => !FilterPropCompletionItems.includes(toKebabCase(key))))
-        .map((_key) => {
-            const key = _key as keyof MaterialToken;
-            const tokenValue = tokens[key];
+        .map((key) => {
+            const tokenMeta = tokens[key];
             const tokenKey = toKebabCase(key);
             const need = valueNeedAddPx(tokenKey);
-            let comment = [tokenValue];
+            let comment = [tokenMeta.token];
 
-            if (tokenMeta[key]) {
+            if (tokenMeta) {
                 comment = [
-                    tokenMeta[key].name,
-                    // @ts-ignore
-                    tokenMeta[key].desc,
+                    tokenMeta.name,
+                    tokenMeta.desc,
                 ].filter(Boolean);
             }
 
             meta[key] = {
                 label: `@${tokenKey}`,
-                detail: `${tokenValue}${need ? 'px' : ''}`,
+                detail: `${tokenMeta.default}${need ? 'px' : ''}`,
                 documentation: `${comment.join('\n\n')}`,
-                filterText: `@${tokenKey}: ${tokenValue}${need ? 'px' : ''}`,
+                filterText: `@${tokenKey}: ${tokenMeta.default}${need ? 'px' : ''}`,
             };
         });
 

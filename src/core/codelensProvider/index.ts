@@ -1,22 +1,22 @@
 import * as vscode from 'vscode';
 import TipCodeLens from './tipCodelens';
-import { getDesignToken } from '../../../es/tokens/getDesignToken';
-import { toKebabCase } from '../../../es/utils/toKebabCase';
+import { toKebabCase } from '../../utils/toKebabCase';
 import { FilterColorCompletionItems, FilterPropCompletionItems } from '../../utils/constants';
+import type { DesignTokenMeta } from '../../types/token';
 
 class CodelensProvider implements vscode.CodeLensProvider {
     private codeLenses: vscode.CodeLens[] = [];
     private regex: RegExp;
-    private tokens: any = {};
+    private tokens: DesignTokenMeta = {};
+    private tokensMap: any = {};
 
-    constructor() {
+    constructor(tokens: DesignTokenMeta) {
         this.regex = /(#[a-zA-Z0-9]{3,6})/g;
+        this.tokens = tokens;
 
-        const tokens = getDesignToken();
-
-        for (const key in tokens) {
-            if (Object.prototype.hasOwnProperty.call(tokens, key)) {
-                let tokenValue = tokens[key];
+        for (const key in this.tokens) {
+            if (Object.prototype.hasOwnProperty.call(this.tokens, key)) {
+                let tokenValue = this.tokens[key].default;
                 if (typeof tokenValue !== 'string') {
                     continue;
                 }
@@ -24,16 +24,19 @@ class CodelensProvider implements vscode.CodeLensProvider {
                 tokenValue = tokenValue.toLowerCase();
 
                 const varName = toKebabCase(key);
-                if (FilterColorCompletionItems.some(item => varName.startsWith(item))
-                || FilterPropCompletionItems.includes(varName)
+                const lessVarName = `@${varName}`;
+
+                if (
+                    FilterColorCompletionItems.some(item => varName.startsWith(item)) ||
+                    FilterPropCompletionItems.includes(varName)
                 ) {
                     continue;
                 }
-                const lessVarName = `@${varName}`;
-                if (!this.tokens[tokenValue]) {
-                    this.tokens[tokenValue] = [lessVarName];
+
+                if (!this.tokensMap[tokenValue]) {
+                    this.tokensMap[tokenValue] = [lessVarName];
                 } else {
-                    this.tokens[tokenValue].push(lessVarName);
+                    this.tokensMap[tokenValue].push(lessVarName);
                 }
             }
         }
@@ -57,7 +60,7 @@ class CodelensProvider implements vscode.CodeLensProvider {
             const position = new vscode.Position(line.lineNumber, indexOf);
             const range = document.getWordRangeAtPosition(position, this.regex);
 
-            const token = this.tokens[matched];
+            const token = this.tokensMap[matched];
             if (range && token) {
                 this.codeLenses.push(
                     ...token.map(t => new TipCodeLens(document.fileName, range, t, match[1]))
@@ -72,8 +75,8 @@ class CodelensProvider implements vscode.CodeLensProvider {
     }
 }
 
-export default function registerCodelensProvider(context: vscode.ExtensionContext) {
-    const provider = new CodelensProvider();
+export default function registerCodelensProvider(context: vscode.ExtensionContext, token: DesignTokenMeta) {
+    const provider = new CodelensProvider(token);
     const disposable = vscode.languages.registerCodeLensProvider(['less', 'vue'], provider);
 
     context.subscriptions.push(disposable);
