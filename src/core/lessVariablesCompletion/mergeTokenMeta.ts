@@ -14,13 +14,13 @@ export const mergeTokenMeta = (
     const meta: Record<string, any> = {};
 
     Object.keys(tokens)
-        .filter((key => !FilterColorCompletionItems.some(item => key.startsWith(item))))
+        .filter((key => !FilterColorCompletionItems.some(item => toKebabCase(key).startsWith(item))))
         .filter((key => !FilterPropCompletionItems.includes(toKebabCase(key))))
         .map((_key) => {
             const key = _key as keyof MaterialToken;
             const tokenValue = tokens[key];
             const tokenKey = toKebabCase(key);
-            const need = valueNeedAddPx(key);
+            const need = valueNeedAddPx(tokenKey);
             let comment = [tokenValue];
 
             if (tokenMeta[key]) {

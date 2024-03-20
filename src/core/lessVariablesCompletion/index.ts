@@ -31,7 +31,7 @@ const provideCompletionItems = async (
 
         const completionItem = new vscode.CompletionItem(label, kind);
         completionItem.detail = detail;
-        completionItem.filterText = filterText;
+        // completionItem.filterText = filterText;
         completionItem.documentation = documentation;
 
         return completionItem;
@@ -43,11 +43,9 @@ export default function lessVariablesCompletion(
 ) {
     context.subscriptions.push(
         vscode.languages.registerCompletionItemProvider(
-            'less',
+            ['less', 'vue'],
             { provideCompletionItems },
-            '@',
-            ':',
-            ' '
-        )
+            ' ',
+        ),
     );
 }

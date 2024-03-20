@@ -14,7 +14,10 @@ const provideHover = async (
     document: vscode.TextDocument,
     position: vscode.Position
 ) => {
-    const word = document.getText(document.getWordRangeAtPosition(position));
+    let word = document.getText(document.getWordRangeAtPosition(position));
+    if (document.languageId === 'vue') {
+        word = `@${word}`;
+    }
     if (!word.startsWith('@')) {
         return;
     }
@@ -27,7 +30,7 @@ const provideHover = async (
         if (Object.prototype.hasOwnProperty.call(tokens, key)) {
             const lessVarName = toKebabCase(key);
             if (word.slice(1) === lessVarName) {
-                const need = valueNeedAddPx(key);
+                const need = valueNeedAddPx(lessVarName);
                 lessVarValue = `${tokens[key]}${need ? 'px' : ''}`;
                 break;
             }
@@ -56,6 +59,7 @@ ${tokenMeta[key]?.desc ?? ''}
 
 export default function lessVariablesHover(context: vscode.ExtensionContext) {
     context.subscriptions.push(
-        vscode.languages.registerHoverProvider('less', { provideHover })
+        vscode.languages.registerHoverProvider('less', { provideHover }),
+        vscode.languages.registerHoverProvider('vue', { provideHover }),
     );
 }

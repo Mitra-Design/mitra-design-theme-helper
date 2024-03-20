@@ -2,7 +2,7 @@
     "name": "mitra-design-theme-helper",
     "displayName": "Mitra Design Theme Helper",
     "description": "Mitra Design 组件库主题变量提示",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "engines": {
         "vscode": "^1.87.0"
     },
@@ -10,7 +10,9 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:less"
+        "onCommand:.mitra-design-theme-helper.codelensAction",
+        "onLanguage:less",
+        "onLanguage:vue"
     ],
     "main": "./dist/extension.js",
     "contributes": {
@@ -30,7 +32,6 @@
         "watch-tests": "tsc -p . -w --outDir out",
         "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
         "lint": "eslint src --ext ts",
-        "parse-docs": "node scripts/parseDocs.js",
         "test": "vscode-test"
     },
     "devDependencies": {
@@ -49,8 +50,8 @@
     },
     "dependencies": {
         "@mitra-design/color": "^2.4.4",
-        "fast-glob": "^3.3.2",
+        "@types/tinycolor2": "^1.4.6",
         "fs-extra": "^11.2.0",
-        "typedoc": "^0.25.12"
+        "tinycolor2": "^1.6.0"
     }
 }

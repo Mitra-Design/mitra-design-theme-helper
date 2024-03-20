@@ -5,6 +5,9 @@ import * as path from 'node:path';
 import * as fs from 'node:fs';
 import lessVariablesCompletion from './core/lessVariablesCompletion';
 import lessVariablesHover from './core/lessVariablesHover';
+import registerColorProvider from './core/colorProvider';
+import registerCodelensProvider from './core/codelensProvider';
+import registerCodelensActionCommand from './core/codelensProvider/registerCommand';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -18,6 +21,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 	lessVariablesCompletion(context);
 	lessVariablesHover(context);
+	registerColorProvider(context);
+	registerCodelensProvider(context);
+
+    registerCodelensActionCommand(context);
 
 
 	// The command has been defined in the package.json file
