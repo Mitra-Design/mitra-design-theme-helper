@@ -43,7 +43,7 @@ export default function lessVariablesCompletion(
             {
                 provideCompletionItems: (document, position) => provideCompletionItems(document, position, tokens)
             },
-            ' ',
+            '@',
         ),
     );
 }

@@ -10,12 +10,16 @@ export const getDesignToken = async () => {
         return;
     }
 
-    const tokenMeta = await fs.readJSON(uri[0].path);
+    try {
+        const tokenMeta = await fs.readJSON(uri[0].fsPath);
 
-    if (tokenMeta && tokenMeta.atom && tokenMeta.material) {
-        return {
-            ...tokenMeta.atom,
-            ...tokenMeta.material
-        };
+        if (tokenMeta && tokenMeta.atom && tokenMeta.material) {
+            return {
+                ...tokenMeta.atom,
+                ...tokenMeta.material
+            };
+        }
+    } catch (error) {
+        vscode.window.showErrorMessage(uri[0].fsPath);
     }
 };

@@ -2,7 +2,7 @@
     "name": "mitra-design-theme-helper",
     "displayName": "Mitra Design Theme Helper",
     "description": "Mitra Design 组件库主题变量提示",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "engines": {
         "vscode": "^1.87.0"
     },

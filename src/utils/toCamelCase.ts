@@ -3,7 +3,7 @@ export const toCamelCase = (str: string) => {
 };
 
 export const toUpperCamelCase = (str: string) => {
-    return str.replace(/-([a-z])+/g, (letter) => {
+    return str.replace(/-([a-z0-9])+/g, (letter) => {
         letter = letter.replace('-', '');
         return letter.charAt(0).toUpperCase() + letter.slice(1);
     });
