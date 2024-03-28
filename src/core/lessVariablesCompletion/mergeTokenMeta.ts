@@ -28,7 +28,7 @@ export const mergeTokenMeta = (tokens: DesignTokenMeta) => {
                 label: `@${tokenKey}`,
                 detail: `${tokenMeta.default}${need ? 'px' : ''}`,
                 documentation: `${comment.join('\n\n')}`,
-                filterText: `@${tokenKey}: ${tokenMeta.default}${need ? 'px' : ''}`,
+                filterText: `@${tokenKey}`,
             };
         });
 

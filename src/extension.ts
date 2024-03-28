@@ -7,11 +7,13 @@ import registerColorProvider from './core/colorProvider';
 import registerCodelensProvider from './core/codelensProvider';
 import registerCodelensActionCommand from './core/codelensProvider/registerCommand';
 import { getDesignToken } from './utils/getDesignToken';
+import { isMitraDesign } from './utils/isMitraDesign';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
-    const tokens = await getDesignToken();
+    const isMt = await isMitraDesign();
+    const tokens = await getDesignToken(isMt);
 
     if (!tokens) {
         vscode.window.showErrorMessage('mitra-design-theme-helper ERROR: Token path not found!');

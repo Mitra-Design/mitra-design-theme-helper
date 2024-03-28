@@ -22,10 +22,15 @@ export const FilterColorCompletionItems = [
  * 需要过滤的属性项
  */
 export const FilterPropCompletionItems = [
-    'font-size',
     'size',
-    'border-radius'
 ];
 
 
 export const WorkspaceConfigProperty = 'mitra-design-theme-helper.token-meta-json-path';
+
+/**
+ * 仅在组件库使用
+ */
+export const OnlyUsedByMitraDesign = [
+    'size'
+];
