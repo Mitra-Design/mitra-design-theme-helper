@@ -1,7 +1,7 @@
 /**
  * Mitra Design 文档 URL
  */
-export const MitraDesignDocsURL = 'https://mitra-design.qiyuesuo.me';
+export const MitraDesignDocsURL = 'http://mitra-design.qiyuesuo.net/intro/theme-vars';
 
 /**
  * 需要过滤的颜色项

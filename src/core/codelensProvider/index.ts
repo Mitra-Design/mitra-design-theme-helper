@@ -38,6 +38,10 @@ class CodelensProvider implements vscode.CodeLensProvider {
                 } else {
                     this.tokensMap[tokenValue].push(lessVarName);
                 }
+
+                if (tokenValue === '#ffffff') {
+                    this.tokensMap['#fff'] = [...this.tokensMap[tokenValue]];
+                }
             }
         }
     }
@@ -62,8 +66,20 @@ class CodelensProvider implements vscode.CodeLensProvider {
 
             const token = this.tokensMap[matched];
             if (range && token) {
+                const cssProp = line.text.trimStart();
                 this.codeLenses.push(
-                    ...token.map(t => new TipCodeLens(document.fileName, range, t, match[1]))
+                    ...token.filter(t => {
+                        if (cssProp.startsWith('color')) {
+                            return !(t.includes('background') || t.includes('border'));
+                        }
+                        if (cssProp.startsWith('background')) {
+                            return !(t.includes('text') || t.includes('border') || t.includes('icon'));
+                        }
+                        if (cssProp.startsWith('border')) {
+                            return !(t.includes('background') || t.includes('text') || t.includes('icon'));
+                        }
+                        return true;
+                    }).map(t => new TipCodeLens(document.fileName, range, t, match[1]))
                 );
             }
         }

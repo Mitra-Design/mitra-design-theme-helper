@@ -1,7 +1,7 @@
 // @ts-nocheck
 import * as vscode from 'vscode';
 import { toKebabCase } from '../../utils/toKebabCase';
-import { MitraDesignDocsURL } from '../../utils/constants';
+import { getDocsUrl } from '../../utils/getDocsUrl';
 import { valueNeedAddPx } from '../../utils/valueNeedAddPx';
 
 import { toUpperCamelCase } from '../../utils/toCamelCase';
@@ -46,7 +46,7 @@ ${tokens[key]?.name ?? ''}
 
 ${tokens[key]?.desc ?? ''}
 
-[Mitra Design Theme 全局变量文档](${MitraDesignDocsURL})
+[Mitra Design Theme 全局变量文档](${getDocsUrl(key)})
     `;
 
     const mdString = new vscode.MarkdownString(content);
