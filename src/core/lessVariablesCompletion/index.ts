@@ -9,6 +9,12 @@ const provideCompletionItems = async (
     tokens: DesignTokenMeta
 ) => {
     const line = document.lineAt(position);
+    const text = document.getText();
+    const index = text.indexOf('<style ');
+    const styleLine = document.lineAt(document.positionAt(index).line);
+    if (index <= 0 || line.lineNumber < styleLine.lineNumber) {
+        return;
+    }
 
     if (line.text.indexOf(':') === -1) {
         return;
