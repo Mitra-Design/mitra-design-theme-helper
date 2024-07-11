@@ -15,7 +15,9 @@ export const FilterColorCompletionItems = [
     'purple',
     'neutral',
     'color-neutral',
-    'color-white'
+    'color-white',
+    'color-mask-base',
+    'shadow-base-color',
 ];
 
 /**
