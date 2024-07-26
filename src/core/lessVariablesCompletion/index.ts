@@ -29,7 +29,7 @@ const provideCompletionItems = async (
         const { detail, filterText, documentation, label } = meta[key];
 
         let kind = vscode.CompletionItemKind.Variable;
-        if (detail.startsWith('#')) {
+        if (detail.startsWith('#') || detail.startsWith('rgb')) {
             kind = vscode.CompletionItemKind.Color;
         }
 
