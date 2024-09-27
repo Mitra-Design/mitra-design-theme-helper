@@ -13,7 +13,7 @@ class ColorProvider implements vscode.DocumentColorProvider {
     provideDocumentColors(document: vscode.TextDocument): vscode.ProviderResult<vscode.ColorInformation[]> {
         const colors: vscode.ColorInformation[] = [];
 
-        const regex = /@(color-([a-z0-9-])+)/g;
+        const regex = /@(color-([a-z0-9-])+|shadow-([a-z0-9-])+)/g;
         let match;
         let text = document.getText();
         let start = 0;

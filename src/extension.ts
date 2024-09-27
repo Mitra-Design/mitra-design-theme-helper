@@ -8,6 +8,7 @@ import registerCodelensProvider from './core/codelensProvider';
 import registerCodelensActionCommand from './core/codelensProvider/registerCommand';
 import { getDesignToken } from './utils/getDesignToken';
 import { isMitraDesign } from './utils/isMitraDesign';
+import lessVariablesHint from './core/lessVariablesHint';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -31,6 +32,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	lessVariablesHover(context, tokens);
 	registerColorProvider(context, tokens);
 	registerCodelensProvider(context, tokens);
+	lessVariablesHint(context, tokens);
 
     registerCodelensActionCommand(context);
 

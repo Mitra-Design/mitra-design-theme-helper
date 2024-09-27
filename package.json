@@ -2,7 +2,7 @@
     "name": "mitra-design-theme-helper",
     "displayName": "Mitra Design Theme Helper",
     "description": "Mitra Design 组件库主题变量提示",
-    "version": "0.0.10",
+    "version": "0.0.12",
     "repository": {
         "type": "git",
         "url": "https://github.com/Mitra-Design/mitra-design-theme-helper.git"
@@ -65,7 +65,6 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
-        "@mitra-design/color": "^2.4.4",
         "@types/fs-extra": "^11.0.4",
         "@types/tinycolor2": "^1.4.6",
         "fs-extra": "^11.2.0",
