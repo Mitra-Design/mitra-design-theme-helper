@@ -11,6 +11,7 @@ export const mergeTokenMeta = (tokens: DesignTokenMeta) => {
     Object.keys(tokens)
         .filter((key => !FilterColorCompletionItems.some(item => toKebabCase(key).startsWith(item))))
         .filter((key => !FilterPropCompletionItems.includes(toKebabCase(key))))
+        .filter((key => !tokens[key].deprecated))
         .map((key) => {
             const tokenMeta = tokens[key];
             const tokenKey = toKebabCase(key);

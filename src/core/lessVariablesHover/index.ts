@@ -39,7 +39,17 @@ const provideHover = async (
 
     const key = toUpperCamelCase(word.slice(1));
 
-    const content = `
+    let content = '';
+    const token = tokens[key];
+
+    if (token?.deprecated) {
+        content = `
+#### ${word}: ${token.deprecated}
+
+[Mitra Design Theme 全局变量文档](${getDocsUrl(key)})
+        `;
+    } else {
+        content = `
 #### ${word}: ${lessVarValue}
 
 ${tokens[key]?.name ?? ''}
@@ -47,7 +57,8 @@ ${tokens[key]?.name ?? ''}
 ${tokens[key]?.desc ?? ''}
 
 [Mitra Design Theme 全局变量文档](${getDocsUrl(key)})
-    `;
+        `;
+    }
 
     const mdString = new vscode.MarkdownString(content);
     return new vscode.Hover(mdString);
